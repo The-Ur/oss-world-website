@@ -1,1 +1,34 @@
 {% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% translate "Ur OSS World" %}</h1>
+  {% if request.user.is_authenticated %}
+  <details><summary>{% translate "Remember the Mission" %}</summary>
+  {% endif %}
+  {% blocktranslate %}
+  <p>
+    This is Ur OSS World: a system of ecosystems collaboratively maintaining open source software, elongating the life span of packages and helping communities -- from entire programming languages to as small as web frameworks -- thrive without the fear of abandonment.
+  </p>
+  <p>
+    The purpose of Ur OSS World elongating package lifespan and compatibility with newer software is to make teams around the world more efficient, squashing <strong>fewer</strong> bugs, vendoring <strong>fewer</strong> packages, and upgrading <strong>fewer</strong> packages. As a collective, we are a global community of developers dividing the large task as a single developer into smaller, manageable chunks.
+  </p>
+  {% endblocktranslate %}
+  {% if request.user.is_authenticated %}
+    </details>
+  {% else %}
+    <hr>
+  {% endif %}
+  {% if request.user.is_authenticated %}
+    <a class="btn btn-primary" type="button">
+    {% translate "Join an ecosystem" %} (TODO!)
+    </a>
+    <a class="btn btn-primary" type="button">
+    {% translate "Apply for an ecosystem" %}
+    </a>
+  {% else %}
+    <a class="btn btn-primary" type="button" href="{% url "account_login" %}">
+      {% translate "To help make the world more efficient, login/signup with GitHub!" %}
+    </a>
+  {% endif %}
+{% endblock content %}

@@ -1,3 +1,10 @@
+#
+#  Copyright (c) Ur LLC and its affiliates
+#
+#  This source code is licensed under the Apache 2.0 license found
+#  in the LICENSE file in the root directory of this source tree.
+#
+
 import pytest
 from django.conf import settings
 from django.contrib import messages
@@ -11,11 +18,8 @@ from django.urls import reverse
 from ur.users.forms import UserAdminChangeForm
 from ur.users.models import User
 from ur.users.tests.factories import UserFactory
-from ur.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from ur.users.views import UserRedirectView, UserUpdateView, user_detail_view
+
 
 pytestmark = pytest.mark.django_db
 

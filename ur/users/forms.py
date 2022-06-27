@@ -1,8 +1,16 @@
+#
+#  Copyright (c) Ur LLC and its affiliates
+#
+#  This source code is licensed under the Apache 2.0 license found
+#  in the LICENSE file in the root directory of this source tree.
+#
+
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django.contrib.auth import forms as admin_forms
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+
 
 User = get_user_model()
 

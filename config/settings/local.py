@@ -1,5 +1,13 @@
+#
+#  Copyright (c) Ur LLC and its affiliates
+#
+#  This source code is licensed under the Apache 2.0 license found
+#  in the LICENSE file in the root directory of this source tree.
+#
+
 from .base import *  # noqa
 from .base import env
+
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -26,7 +34,10 @@ CACHES = {
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
+if env("USE_DOCKER") == "yes":
+    EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
+else:
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
 EMAIL_PORT = 1025
 

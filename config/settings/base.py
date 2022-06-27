@@ -1,9 +1,18 @@
 """
 Base settings to build other settings files upon.
 """
+#
+#  Copyright (c) Ur LLC and its affiliates
+#
+#  This source code is licensed under the Apache 2.0 license found
+#  in the LICENSE file in the root directory of this source tree.
+#
+
+import os
 from pathlib import Path
 
 import environ
+
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # ur/
@@ -11,14 +20,21 @@ APPS_DIR = ROOT_DIR / "ur"
 env = environ.Env()
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
-if READ_DOT_ENV_FILE:
+if READ_DOT_ENV_FILE or env("USE_DOCKER", default="no") != "yes":
     # OS environment variables take precedence over variables from .env
-    env.read_env(str(ROOT_DIR / ".env"))
+    if not (ROOT_DIR / ".envs" / ".local" / ".user").exists():
+        raise ValueError(
+            ".envs/.local/.user env file not found. View .envs/.local/.template.user"
+        )
+    env.read_env(str(ROOT_DIR / ".envs" / ".local" / ".django"))
+    os.environ["USE_DOCKER"] = "no"
+    env.read_env(str(ROOT_DIR / ".envs" / ".local" / ".postgres"))
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", False)
+IS_TEST = False
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -40,7 +56,12 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES = {
+    "default": env.db(
+        "DATABASE_URL",
+        default="postgres://postgres:postgres@localhost:5432/ossworldwebsite",
+    ),
+}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -71,6 +92,7 @@ THIRD_PARTY_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.github",
     "django_celery_beat",
     "rest_framework",
     "rest_framework.authtoken",
@@ -136,7 +158,6 @@ MIDDLEWARE = [
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
-    "django.middleware.common.BrokenLinkEmailsMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
@@ -295,6 +316,18 @@ ACCOUNT_FORMS = {"signup": "ur.users.forms.UserSignupForm"}
 SOCIALACCOUNT_ADAPTER = "ur.users.adapters.SocialAccountAdapter"
 # https://django-allauth.readthedocs.io/en/latest/forms.html
 SOCIALACCOUNT_FORMS = {"signup": "ur.users.forms.UserSocialSignupForm"}
+
+# https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
+SOCIALACCOUNT_PROVIDERS = {
+    "github": {
+        "VERIFIED_EMAIL": True,
+        "SCOPE": [
+            "read:user",
+            "user:email",
+        ],
+    }
+}
+
 # django-compressor
 # ------------------------------------------------------------------------------
 # https://django-compressor.readthedocs.io/en/latest/quickstart/#installation

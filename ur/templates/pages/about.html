@@ -1,1 +1,27 @@
 {% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+  <h1>{% translate "About" %}</h1>
+  {% blocktranslate %}
+  <p>
+    This is Ur OSS World: a system of ecosystems collaboratively maintaining open source software, elongating the life span of packages and helping communities -- from entire programming languages to as small as web frameworks -- thrive without the fear of abandonment.
+  </p>
+  <p>
+    The purpose of Ur OSS World elongating package lifespan and compatibility with newer software is to make teams around the world more efficient, squashing <strong>fewer</strong> bugs, vendoring <strong>fewer</strong> packages, and upgrading <strong>fewer</strong> packages. As a collective, we are a global community of developers dividing the large task as a single developer into smaller, manageable chunks.
+  </p>
+  {% endblocktranslate %}
+  <hr>
+  <h3>{% translate "History" %}</h3>
+  {% blocktranslate %}
+    <p>
+      <a href="https://github.com/Andrew-Chen-Wang/">Andrew Chen Wang</a> was developing <a href="https://urth.earth">The Ur's</a> iOS app; as he got started, he realized that maintenance of several iOS keychain wrappers were being left unmaintained with open PRs beginning to pile up.
+    </p>
+    <p>
+      <a href="https://jazzband.co/">Jazzband</a> is a collective of Python (mostly Django) developers maintaining packages that are crucial to the Python (again, mostly Django) ecosystem such as <a href="https://github.com/jazzband/django-oauth-toolkit/">django-oauth-toolkit</a>, the only OAuth2-ready handler for native Django support compared to the generic <a href="https://github.com/oauthlib/oauthlib">oauthlib</a> Python package used by several Python web frameworks.
+    </p>
+    <p>
+      As <a href="https://urth.earth">The Ur</a> grows its metaverse, Andrew realized there was a need for a <i>Jazzband</i> for any kind of ecosystem. After a quick poll of approval on Reddit, The Ur decided to make an OSS system of maintainers like Jazzband but easily extensible for all types of ecosystems.
+    </p>
+  {% endblocktranslate %}
+{% endblock content %}

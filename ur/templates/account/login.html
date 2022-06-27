@@ -1,5 +1,10 @@
 {% extends "account/base.html" %}
 
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/brands.min.css" integrity="sha512-OivR4OdSsE1onDm/i3J3Hpsm5GmOVvr9r49K3jJ0dnsxVzZgaOJ5MfxEAxCyGrzWozL9uJGKz6un3A7L+redIQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% endblock %}
+
 {% load i18n %}
 {% load account socialaccount %}
 {% load crispy_forms_tags %}
@@ -8,28 +13,21 @@
 
 {% block inner %}
 
-<h1>{% translate "Sign In" %}</h1>
+<h1>{% translate "Sign In" %} / {% translate "Sign up" %}</h1>
 
 {% get_providers as socialaccount_providers %}
 
 {% if socialaccount_providers %}
-  <p>
-    {% translate "Please sign in with one of your existing third party accounts:" %}
-    {% if ACCOUNT_ALLOW_REGISTRATION %}
-      {% blocktranslate trimmed %}
-        Or, <a href="{{ signup_url }}">sign up</a>
-        for a {{ site_name }} account and sign in below:
-      {% endblocktranslate %}
-    {% endif %}
-  </p>
-
   <div class="socialaccount_ballot">
+  {% for provider in socialaccount_providers %}
+    <a class="btn btn-outline-primary" href="{% provider_login_url provider.id process="login" scope=scope auth_params=auth_params %}">
+      <span class="fa-brands fa-github"></span> {% translate "Sign in / Sign up with GitHub" %}
+    </a>
+  {% endfor %}
 
-    <ul class="socialaccount_providers">
-      {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-    </ul>
-
-    <div class="login-or">{% translate "or" %}</div>
+{#    <ul class="socialaccount_providers">#}
+{#      {% include "socialaccount/snippets/provider_list.html" with process="login" %}#}
+{#    </ul>#}
 
   </div>
 
@@ -45,15 +43,5 @@
     </p>
   {% endif %}
 {% endif %}
-
-<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  {{ form|crispy }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% translate "Forgot Password?" %}</a>
-  <button class="primaryAction btn btn-primary" type="submit">{% translate "Sign In" %}</button>
-</form>
 
 {% endblock %}

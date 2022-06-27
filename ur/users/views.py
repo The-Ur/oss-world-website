@@ -1,9 +1,17 @@
+#
+#  Copyright (c) Ur LLC and its affiliates
+#
+#  This source code is licensed under the Apache 2.0 license found
+#  in the LICENSE file in the root directory of this source tree.
+#
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import DetailView, RedirectView, UpdateView
+
 
 User = get_user_model()
 

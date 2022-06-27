@@ -331,3 +331,4 @@ ur/media/
 .env
 .envs/*
 !.envs/.local/
+.envs/.local/.user

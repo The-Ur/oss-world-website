@@ -1,8 +1,16 @@
+#
+#  Copyright (c) Ur LLC and its affiliates
+#
+#  This source code is licensed under the Apache 2.0 license found
+#  in the LICENSE file in the root directory of this source tree.
+#
+
 import pytest
 from celery.result import EagerResult
 
 from ur.users.tasks import get_users_count
 from ur.users.tests.factories import UserFactory
+
 
 pytestmark = pytest.mark.django_db
 

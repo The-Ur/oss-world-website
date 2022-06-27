@@ -1,0 +1,10 @@
+Create a `.user` file in this directory to set these values.
+The file will be gitignored. Do not write any values in here.
+
+# OAuth2
+# ------------------------------------------------------------------------------
+# Create your own GitHub OAuth application. The redirect uri specified should be
+# http://127.0.0.1:8000/accounts/github/login/callback/
+# Ensure you register for a provider in the admin panel.
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
