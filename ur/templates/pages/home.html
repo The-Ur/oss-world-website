@@ -20,14 +20,14 @@
     <hr>
   {% endif %}
   {% if request.user.is_authenticated %}
-    <a class="btn btn-primary" type="button">
+    <a class="btn btn-primary" role="button">
     {% translate "Join an ecosystem" %} (TODO!)
     </a>
-    <a class="btn btn-primary" type="button">
+    <a class="btn btn-primary" role="button">
     {% translate "Apply for an ecosystem" %}
     </a>
   {% else %}
-    <a class="btn btn-primary" type="button" href="{% url "account_login" %}">
+    <a class="btn btn-primary" role="button" href="{% url "account_login" %}">
       {% translate "To help make the world more efficient, login/signup with GitHub!" %}
     </a>
   {% endif %}

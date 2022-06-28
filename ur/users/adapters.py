@@ -7,14 +7,16 @@
 
 from typing import Any
 
+import requests
 from allauth.account.adapter import DefaultAccountAdapter
-from allauth.account.utils import user_field
+from allauth.socialaccount import app_settings as allauth_app_settings
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from allauth.socialaccount.providers.github import views as github_views
 from django.conf import settings
 from django.http import HttpRequest
+from github import Github
 
 from ur.users.models import User
-from ur.utils.github.client import github_client
 
 
 class AccountAdapter(DefaultAccountAdapter):
@@ -22,22 +24,49 @@ class AccountAdapter(DefaultAccountAdapter):
         return False
 
 
+# We need to grab the OAuth token from the GitHub provider
+class GitHubOAuth2Adapter(github_views.GitHubOAuth2Adapter):
+    def complete_login(self, request, app, token, **kwargs):
+        headers = {"Authorization": f"token {token.token}"}
+        resp = requests.get(self.profile_url, headers=headers)
+        resp.raise_for_status()
+        extra_data = resp.json()
+        if allauth_app_settings.QUERY_EMAIL and not extra_data.get("email"):
+            extra_data["email"] = self.get_email(headers)
+        extra_data["token"] = token.token
+        return self.get_provider().sociallogin_from_response(request, extra_data)
+
+
+github_views.GitHubOAuth2Adapter = GitHubOAuth2Adapter
+
+
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def is_open_for_signup(self, request: HttpRequest, sociallogin: Any):
         return getattr(settings, "ACCOUNT_ALLOW_REGISTRATION", True)
 
     def populate_user(self, request, sociallogin, data):
+        data = data | sociallogin.account.extra_data
+        access_token = data.pop("token", None)
         user = super().populate_user(request, sociallogin, data)
-        user_id = data["id"]
+        user.id = data["id"]
         try:
             # Username already exists, so the other user must've changed usernames
             dup_user = User.objects.only("id", "username").get(
                 username=data["username"]
             )
-            dup_user.username = github_client.get_user_by_id(user_id)["login"]
-            dup_user.save(update_fields=["username"])
+            real_username = Github(access_token).get_user_by_id(dup_user.id).login
+            if real_username != dup_user.username and user.id != dup_user.id:
+                dup_user.username = real_username
+                dup_user.save(update_fields=["username"])
         except User.DoesNotExist:
             pass
-        user_field(user, "name", data.get("name"))
-        user_field(user, "id", user_id)
+        user.name = data["name"] or ""
+        extra = user.extra
+        if not extra:
+            extra = {}
+        # clean data
+        extra["github_profile"] = {
+            k: v for k, v in data.items() if not k.endswith("url")
+        }
+        user.extra = extra
         return user

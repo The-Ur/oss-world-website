@@ -14,6 +14,7 @@ from factory.django import DjangoModelFactory
 
 class UserFactory(DjangoModelFactory):
 
+    id = Faker("pyint", min_value=100_000_000, max_value=9_999_999_999)
     username = Faker("user_name")
     email = Faker("email")
     name = Faker("name")
