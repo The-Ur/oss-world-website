@@ -25,7 +25,8 @@ urlpatterns = [
     # User management
     path("users/", include("ur.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
-    # Your stuff: custom urls includes go here
+    path("ecosystem/", include("ur.ecosystem.urls", namespace="ecosystem")),
+    path("package/", include("ur.package.urls", namespace="package")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 # API URLS

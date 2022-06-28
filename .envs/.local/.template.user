@@ -1,10 +1,27 @@
-Create a `.user` file in this directory to set these values.
-The file will be gitignored. Do not write any values in here.
+# Create a `.user` file in this directory to set these values.
+# The file will be gitignored. Do not write any values in here.
 
-# OAuth2
+# GitHub Developer Settings
 # ------------------------------------------------------------------------------
+# The username for a GitHub owner; this can be left as your username.
+# The purpose of having an owner managed by The Ur is to ensure that,
+# in the case of malicious owner, the user can be stripped of their
+# access to rights of the organization.
+GITHUB_OWNER_USERNAME=
+
+# GitHub OAuth
+# ------------
 # Create your own GitHub OAuth application. The redirect uri specified should be
 # http://127.0.0.1:8000/accounts/github/login/callback/
 # Ensure you register for a provider in the admin panel.
-GITHUB_CLIENT_ID=
-GITHUB_CLIENT_SECRET=
+# Formatting: <client id>:<client secret>
+GITHUB_OAUTH_CREDENTIALS=
+
+# GitHub App
+# ----------
+GITHUB_WEBHOOK_SECRET=
+
+# You must hash the actual web secret to SHA256
+# Formatting: <client id>:<client secret>
+GITHUB_APP_ID=
+GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----\nMIIEpQIBAAKCAQEAydAD91OKeKHLljasctc3AZ+GHsPkf8f3qrEpOofd7vYxpSSh\nCx2pyH4OqeRIGVSqi/9q29PR22F7/0fjRP84F4TrwAZhh98er7k7p/2fA6ISRyeo\neqklm0/LoW/SbV08Ss3snt+aaQ8CPPGkotDg92Deqr/v+p4AbMm1j2xJi70MaDO0\nd3O1YP7/luA+oe1y0EtR3ynqdFi6kdfGjPMYZUiuATqXxMsgHaHzn/W22HwSsUWn\nkLAtUf3EFObiaD6ZnuWmsUvFKvuHTZLMxji2ePsswVDSnlfUhHp7bdXqHymqUtBL\nPFVLMiIIpF7ediTDPfU/YGgVXSjCnxmpcQhUNQIDAQABAoIBAHnkyoB4VQrHrs/r\n9fznQLIaSEgMydbkURMoLl7L8aCD0ziMBzlPkV0nxnOXDnU+TkSA4WolZnu7RcnL\nAdqKzLZn8nzpXb9TZJV+rCmrZoArRB72NSzhPXWxnKzFfbPQvLnx5xmOtRT/m7pz\nuZ0dzMOeHt/DTo9xH5CVxLP8E+/yC9cQ8sW1qcscTB60F6ULZ0CbhD2M71t+Lkxq\npAFCwUWvpmw19E6WXjy/WIKW6zjfXrdlt7rmBh545T3i56h4ik/drxSnPgkEmG5n\nGVIu/mKgyFkss0bDVZOon4urtv79XMexA38PTmYoYpc9/nzWnLhL1lpDQcMkXOrR\nK8/kg4ECgYEA+ht35y9nkwhaCt+cRgxikKDNqwFbHc6V5WTbWDfin3Qnz6SWktnM\nCnWVfybr/YJpaYrSd3sOlzCUtSVYPY1E6fawBCxl6iPS0u7JmcN/TpxxSkuas/kv\nvlNQPd3HTznrynGU242ufXEBzfzss+meRaN//EBupHg/VqVVvXktXU8CgYEAzpFB\nbe/UxxNGpHNiP5z5HA3yV3EL+UtxOu1/U1n8y6sRrsokU4fMF2U3/AOYo4EM66Q/\njxJVoNzqYSfLqLbB5P8T6I6v7VdwgfU+SMi5TG4IDfV4yANhb6dYrjhxgtHdDFeF\nCfb2mauplsARyvhrAfTXQ0ra1ndk+M/ereAoPTsCgYEAvA39SPIm4bIs6fIacb0M\nO4z9N7BMT4wuvw3ns1xJ5PUUnhc2NHLY7aBd6P5eAP6WvgnomHgJj3qyxcWvpJBd\nGcIntOuhMbz/3yQ2p4wMZBJTSLayOtKJqITCV9Iy84oslcpzT+YnJiDbZ4PegqSN\nIfV+3S+hQb88eKzWXCIKDxcCgYEAv26P41EysHclrXuc3nUbyysFnpGOVi7bNZAp\nwlYP17OmxIRi2+Jqenf8RRoUF9qd3bcui+mi31w7/WPC8ozD7fOSQKATW/H/uwBL\nA2q5hqIl5sHJeBrh7nZ40aRPVbwlja2CBnUPneQfWyyOkLpdeMetwpgZbE3jjk4e\nAKdOw0cCgYEAyK4o0oyCteTNvU8hVrbckpo+vVsVY6Cmg2i2tzsad7pyuBM3t7Jb\nttUc+7HZccSId0msFulhB+0DFJeLWVhQRMZMl5l4S9TJAQoqSIh/9Rs1WHsLZ5dd\nEiYnq/HBHt7jPeJHrX3Q4K9WEfmf92ArcdP5SV0n9ha1LG5Olttvj+c=\n-----END RSA PRIVATE KEY-----"

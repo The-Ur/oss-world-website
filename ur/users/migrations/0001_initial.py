@@ -26,11 +26,8 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "id",
-                    models.BigAutoField(
-                        auto_created=True,
-                        primary_key=True,
-                        serialize=False,
-                        verbose_name="ID",
+                    models.PositiveBigIntegerField(
+                        primary_key=True, serialize=False, verbose_name="GitHub ID"
                     ),
                 ),
                 ("password", models.CharField(max_length=128, verbose_name="password")),
@@ -117,6 +114,13 @@ class Migration(migrations.Migration):
                         related_query_name="user",
                         to="auth.Permission",
                         verbose_name="user permissions",
+                    ),
+                ),
+                (
+                    "extra",
+                    models.JSONField(
+                        blank=True,
+                        default=dict,
                     ),
                 ),
             ],

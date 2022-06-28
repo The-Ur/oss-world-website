@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags i18n %}
+
+{% block content %}
+  <form class="form-horizontal mb-3" method="post" action="{% url 'ecosystem:apply' %}">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="control-group">
+      <div class="controls">
+        <button type="submit" class="btn btn-primary">{% translate "Apply" %}</button>
+      </div>
+    </div>
+  </form>
+{% endblock content %}

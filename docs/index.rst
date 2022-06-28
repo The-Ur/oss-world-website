@@ -13,6 +13,7 @@ Welcome to OSS's documentation!
    howto
    pycharm/configuration
    users
+   ecosystem/application
 
 
 

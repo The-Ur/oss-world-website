@@ -29,6 +29,11 @@ if READ_DOT_ENV_FILE or env("USE_DOCKER", default="no") != "yes":
     env.read_env(str(ROOT_DIR / ".envs" / ".local" / ".django"))
     os.environ["USE_DOCKER"] = "no"
     env.read_env(str(ROOT_DIR / ".envs" / ".local" / ".postgres"))
+    env.read_env(str(ROOT_DIR / ".envs" / ".local" / ".user"))
+    a = os.environ["DATABASE_URL"] = (
+        f"postgresql://{env('POSTGRES_USER')}:{env('POSTGRES_PASSWORD')}@"
+        f"localhost:{env('POSTGRES_PORT')}/{env('POSTGRES_DB')}"
+    )
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -56,12 +61,7 @@ LOCALE_PATHS = [str(ROOT_DIR / "locale")]
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {
-    "default": env.db(
-        "DATABASE_URL",
-        default="postgres://postgres:postgres@localhost:5432/ossworldwebsite",
-    ),
-}
+DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 # https://docs.djangoproject.com/en/stable/ref/settings/#std:setting-DEFAULT_AUTO_FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -102,7 +102,9 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "ur.users",
-    # Your stuff: custom apps go here
+    "ur.core",
+    "ur.ecosystem",
+    "ur.package",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -360,5 +362,11 @@ SPECTACULAR_SETTINGS = {
         {"url": "https://theur.world", "description": "Production server"},
     ],
 }
-# Your stuff...
+
+# GitHub
 # ------------------------------------------------------------------------------
+GITHUB_WEBHOOK_SECRET = env("GITHUB_WEBHOOK_SECRET", default="")
+GITHUB_OWNER_USERNAME = env("GITHUB_OWNER_USERNAME", default="")
+GITHUB_APP_ID = env("GITHUB_APP_ID", default="")
+GITHUB_APP_PRIVATE_KEY = env.str("GITHUB_APP_PRIVATE_KEY", multiline=True, default="")
+GITHUB_OAUTH_CREDENTIALS = env("GITHUB_OAUTH_CREDENTIALS", default="")
