@@ -18,7 +18,7 @@ from django.urls import reverse
 from ur.users.forms import UserAdminChangeForm
 from ur.users.models import User
 from ur.users.tests.factories import UserFactory
-from ur.users.views import UserRedirectView, UserUpdateView, user_detail_view
+from ur.users.views.user import UserRedirectView, UserUpdateView, user_detail_view
 
 
 pytestmark = pytest.mark.django_db
@@ -68,6 +68,7 @@ class TestUserUpdateView:
         # Initialize the form
         form = UserAdminChangeForm()
         form.cleaned_data = {}
+        form.instance = user
         view.form_valid(form)
 
         messages_sent = [m.message for m in messages.get_messages(request)]

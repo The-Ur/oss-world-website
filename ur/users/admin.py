@@ -20,9 +20,8 @@ User = get_user_model()
 class UserAdmin(auth_admin.UserAdmin):
 
     form = UserAdminChangeForm
-    add_form = UserAdminCreationForm
     fieldsets = (
-        (None, {"fields": ("username", "password")}),
+        (None, {"fields": ("id", "username", "password")}),
         (_("Personal info"), {"fields": ("name", "email")}),
         (
             _("Permissions"),
@@ -38,5 +37,10 @@ class UserAdmin(auth_admin.UserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
+    readonly_fields = ("id", "username", "email")
     list_display = ["username", "name", "is_superuser"]
-    search_fields = ["name"]
+    search_fields = ["username"]
+
+    def has_add_permission(self, request, obj=None):
+        """Adding should be done through GitHub OAuth"""
+        return False

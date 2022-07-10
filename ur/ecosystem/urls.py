@@ -8,7 +8,19 @@
 from django.urls import path
 
 from ur.ecosystem.views.application.apply import ApplicationView
+from ur.ecosystem.views.application.finalize import (
+    EcosystemApplicationView,
+    FinalizeView,
+)
 
 
 app_name = "ecosystem"
-urlpatterns = [path("apply/", ApplicationView.as_view(), name="apply")]
+urlpatterns = [
+    path("apply/", ApplicationView.as_view(), name="apply"),
+    path(
+        "application-status/<int:pk>/",
+        EcosystemApplicationView.as_view(),
+        name="application-status",
+    ),
+    path("application-finalize/", FinalizeView.as_view(), name="application-finalize"),
+]

@@ -23,9 +23,34 @@
     <a class="btn btn-primary" role="button">
     {% translate "Join an ecosystem" %} (TODO!)
     </a>
-    <a class="btn btn-primary" role="button">
+
+    <a class="btn btn-primary" role="button" href="{% url "ecosystem:apply" %}">
     {% translate "Apply for an ecosystem" %}
     </a>
+    <hr>
+    <details open>
+    <summary>{% translate "Applications" %}</summary>
+
+    <ul>
+    {% for application in applications %}
+      <li><a href="{% url "ecosystem:application-status" application.installation_id %}">{% if application.is_approved and not application.extra.finalized %}<strong>{% endif %}{{ application.organization_login }}{% if application.is_approved and not application.extra.finalized %}</strong>{% endif %}</a> ({% translate "status" %}: {{ application.status_text }}{% if application.is_approved and not application.extra.finalized %}. <strong>{% translate "Please follow the link to finalize the application!" %}</strong>{% endif %})</li>
+    {% endfor %}
+    </ul>
+    </details>
+    <hr>
+    <details open>
+    <summary>{% translate "Ecosystems" %}</summary>
+
+    <ul>
+    {% for ecosystem in ecosystems %}
+      <li>{{ ecosystem.name }}</li>
+    {% empty %}
+      <a class="btn btn-primary mt-3" role="button">
+      {% translate "Join an ecosystem" %} (TODO!)
+      </a>
+    {% endfor %}
+    </ul>
+    </details>
   {% else %}
     <a class="btn btn-primary" role="button" href="{% url "account_login" %}">
       {% translate "To help make the world more efficient, login/signup with GitHub!" %}

@@ -21,6 +21,7 @@ WEBHOOK_REGISTRATION: dict[str, list[GitHubWebhookHandlerT]] = {}
 def github_webhook(event: str):
     """
     Register a GitHub webhook event (from x-github-event header) like "installation"
+    https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads
 
     Example:
         @github_webhook("installation")

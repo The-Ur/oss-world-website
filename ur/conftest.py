@@ -6,6 +6,7 @@
 #
 
 import pytest
+from django.test.client import Client
 
 from ur.users.models import User
 from ur.users.tests.factories import UserFactory
@@ -19,3 +20,17 @@ def media_storage(settings, tmpdir):
 @pytest.fixture
 def user() -> User:
     return UserFactory()
+
+
+@pytest.fixture
+def admin_user() -> User:
+    return UserFactory(
+        username="admin", email="admin@example.com", is_staff=True, is_superuser=True
+    )
+
+
+@pytest.fixture
+def admin_client(admin_user) -> Client:
+    client = Client()
+    client.force_login(admin_user)
+    return client

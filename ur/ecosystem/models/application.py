@@ -8,6 +8,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from ur.utils.github.webhook import github_webhook
+
 
 class InstalledOrganization(models.Model):
     """Organizations that installed the GitHub app."""
@@ -15,6 +17,7 @@ class InstalledOrganization(models.Model):
     id = models.PositiveBigIntegerField(
         primary_key=True, verbose_name=_("Organization ID from GitHub")
     )
+    node_id = models.CharField(max_length=30, verbose_name=_("Organization node ID"))
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     # Original installation id
@@ -48,14 +51,28 @@ class InstalledOrganization(models.Model):
         return f"{self.organization_login} ({self.id})"
 
 
+@github_webhook("organization")
+def rename_ecosystem(data: dict):
+    if data["action"] != "renamed":
+        return
+    _original_name = data["changes"]["organization"]["login"]["from"]
+    InstalledOrganization.objects.filter(id=data["organization"]["id"]).update(
+        organization_login=data["organization"]["login"]
+    )
+    EcosystemApplication.objects.filter(
+        installation_id=data["organization"]["id"]
+    ).update(organization_login=data["organization"]["login"])
+
+
 class EcosystemApplication(models.Model):
     """User-filled application to create an ecosystem on Ur OSS World"""
 
-    id = models.OneToOneField(
+    installation = models.OneToOneField(
         InstalledOrganization,
         primary_key=True,
         on_delete=models.CASCADE,
         verbose_name=_("Organization ID from GitHub"),
+        to_field="id",
     )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -87,3 +104,19 @@ class EcosystemApplication(models.Model):
     is_approved = models.BooleanField(default=False)
 
     extra = models.JSONField(default=dict, blank=True)
+
+    @property
+    def status_text(self):
+        if self.is_approved:
+            return _("Approved")
+        if hasattr(self, "admin_pending"):
+            return _("Pending") if self.admin_pending else _("Rejected")  # type: ignore
+        return _("Rejected") if self.admin_reason else _("Pending")
+
+    @property
+    def is_pending(self):
+        if self.is_approved:
+            return False
+        if hasattr(self, "admin_pending"):
+            return self.admin_pending
+        return not self.admin_reason

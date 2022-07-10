@@ -20,9 +20,22 @@ account, to begin applying:
 
 .. _install the "Ur OSS World" GitHub app: https://github.com/apps/ur-oss-world
 
-3. Ensure the GitHub owner (e.g. UrOSSWorldOwner) is added as an owner
-   to the organization. If not, then change the role to be "Owner".
-4. Leave the organization. If there are other owners in the organization,
+3. Invite the GitHub user UrOSSWorldOwner as an owner to your GitHub organization.
+
+.. note::
+   When we approve an application, we'll also send an invite to our GitHub user.
+
+4. Go to https://theur.world/accounts/login/ and login/signup via GitHub.
+5. Go to https://theur.world/ecosystem/apply/ and fill with the necessary
+   information. You should be redirected to the application status page.
+6. Allow for us to process your application in 3-5 business days.
+   We'll send you any follow-up information such as application results
+   or further instructions in an email.
+
+.. note::
+   Sorry! We promise we'll figure out how to make administration faster!
+
+7. Leave the organization. If there are other owners in the organization,
    have them also leave. You will be given ownership back in a later step.
    This way, complete and total ownership is given to Ur OSS World's Owner
    GitHub account for security purposes.
@@ -44,11 +57,4 @@ account, to begin applying:
 
    Thank you for understanding :)
 
-5. Go to https://theur.world/accounts/login/ and login/signup via GitHub.
-6. Go to https://theur.world/ecosystem/apply/ and fill it the necessary
-   information.
-7. Allow for us to process your application in 3-5 business days.
-   We'll send you any follow-up information in an email.
-
-.. note::
-   Sorry! We promise we'll figure out how to make administration faster!
+8. Head to your application's status page on the website, and press Finalize.

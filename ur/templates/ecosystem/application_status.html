@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block javascript %}
+  <script defer src="{% static "js/ecosystem/finalize.js" %}" type="application/javascript"></script>
+{% endblock javascript %}
+
+{% block content %}
+  <h3>{% translate "Application" %}: {{ object.organization_login }}</h3>
+  <p>{% translate "Status" %}: {{ object.status_text }}</p>
+  {% if object.is_approved and not object.extra.finalized and not ecosystem_exists %}
+    <h3>{% translate "Congrats on the approved application!" %}</h3>
+    <p>
+    {% blocktranslate %}
+      Please finalize the application by heading to the bottom of the page, and following the instructions there.
+    {% endblocktranslate %}
+    </p>
+  {% endif %}
+
+  {% if base_permission != "write" %}
+    <p class="alert-warning">
+    {% blocktranslate %}
+      It is highly recommended to set the organization's base repository role as write.
+      This way, contributions can be continuously merged so that project leads, who are
+      the only ones with the maintainer role are not burdened with reviewing all PRs.
+      This is a simple recommendation, but it's up to other organization owners and
+      your discretion whether to set it to write.
+    {% endblocktranslate %}
+    </p>
+  {% else %}
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check alert-success" viewBox="0 0 16 16">
+      <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"></path>
+    </svg>
+    <p class="d-inline-block ml-2 alert-success">
+      {% translate "Base repository permission set to write" %}
+    </p>
+  {% endif %}
+  {% if not ecosystem_exists and object.is_approved %}
+    <p>
+    {% blocktranslate %}
+      Before finalizing, you need to add {{ settings.GITHUB_OWNER_USERNAME }} as a totalitarian owner of the GitHub organization. To do this, this GitHub user must first be added as an owner. Have all current organization owners, including you, leave the organization.
+    {% endblocktranslate %}
+    </p>
+    <p>
+    {% translate "For more information, visit" %}: <a href="https://docs.github.com/en/organizations/managing-organization-settings/transferring-organization-ownership">{% translate "these GitHub docs" %}</a>. {% translate "For an explanation as to why we do this, visit" %}: <a href="https://docs.theur.world/en/latest/application.html">{% translate "the instructions for applications docs" %}</a>.
+    </p>
+    {% csrf_token %}
+    <button type="button" class="btn btn-primary" id="finalize-application-button" data-text="{% translate "Finalize" %}" data-link="{% url "ecosystem:application-finalize" %}" data-id="{{ object.installation_id }}" data-slug="{{ object.organization_login }}">
+    </button>
+  {% elif object.is_approved %}
+    <p>
+    {% blocktranslate %}
+      Congrats on an accepted ecosystem! You can now visit the organization and start adding packages.
+    {% endblocktranslate %}
+    </p>
+  {% endif %}
+{% endblock content %}

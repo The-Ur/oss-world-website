@@ -14,8 +14,6 @@ from django.utils.translation import gettext_lazy as _
 class User(AbstractUser):
     """
     Default custom user model for OSS.
-    If adding fields that need to be filled at user signup,
-    check forms.SignupForm and forms.SocialSignupForms accordingly.
     """
 
     id = PositiveBigIntegerField(primary_key=True, verbose_name=_("GitHub ID"))
@@ -35,3 +33,12 @@ class User(AbstractUser):
 
         """
         return reverse("users:detail", kwargs={"username": self.username})
+
+    def get_name(self):
+        """Get name of user.
+
+        Returns:
+            str: Name of user.
+
+        """
+        return self.name or self.username

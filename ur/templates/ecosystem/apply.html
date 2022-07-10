@@ -2,6 +2,15 @@
 {% load crispy_forms_tags i18n %}
 
 {% block content %}
+  <h3>{% translate "Ecosystem Application" %}</h3>
+  <p>
+  {% blocktranslate %}
+    Ecosystems are GitHub organizations that are used to host OSS on a collaborative basis. Upon signing up, we'll automatically set up some configurations and ask for you to do some extra steps to ensure we can foster all communities in every corner of the software universe.
+  {% endblocktranslate %}
+  </p>
+  <a href="https://docs.theur.world/en/latest/application.html">
+    {% translate "Tutorial for this application process" %}
+  </a>
   <form class="form-horizontal mb-3" method="post" action="{% url 'ecosystem:apply' %}">
     {% csrf_token %}
     {{ form|crispy }}

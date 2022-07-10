@@ -18,6 +18,10 @@ def check_ecosystem_application(payload: dict):
 
     https://docs.github.com/en/developers/webhooks-and-events/webhooks/webhook-events-and-payloads#installation
     """
+    # Even if the user is not an organization, they can only apply with
+    # EcosystemApplication if they are an organization. After becoming an organization,
+    # they can apply and will be unable to become a user again.
+
     # Did not implement "new_permissions_accepted" since it's not needed
 
     match payload["action"]:

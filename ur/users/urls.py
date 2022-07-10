@@ -7,7 +7,7 @@
 
 from django.urls import path
 
-from ur.users.views import user_detail_view, user_redirect_view, user_update_view
+from ur.users.views.user import user_detail_view, user_redirect_view, user_update_view
 
 
 app_name = "users"

@@ -47,6 +47,9 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def populate_user(self, request, sociallogin, data):
         data = data | sociallogin.account.extra_data
         access_token = data.pop("token", None)
+        client = Github(access_token)
+        setattr(sociallogin, "github_client", client)
+
         user = super().populate_user(request, sociallogin, data)
         user.id = data["id"]
         try:
@@ -54,7 +57,7 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
             dup_user = User.objects.only("id", "username").get(
                 username=data["username"]
             )
-            real_username = Github(access_token).get_user_by_id(dup_user.id).login
+            real_username = client.get_user_by_id(dup_user.id).login
             if real_username != dup_user.username and user.id != dup_user.id:
                 dup_user.username = real_username
                 dup_user.save(update_fields=["username"])
